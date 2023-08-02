@@ -19,7 +19,7 @@ bindsym $mod+f exec firefox
 bindsym $mod+p exec export _JAVA_AWT_WM_NONREPARENTING=1 && pycharm
 bindsym $mod+v exec vlc
 bindsym $mod+b exec blueberry
-bindsym $control+p exec Shift+Insert
+bindsym Ctrl+p exec Shift+Insert
 
 # Toggle workspaces
 bindsym $mod+Tab workspace back_and_forth
