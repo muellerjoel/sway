@@ -7,7 +7,8 @@ set $up k
 set $right l
 
 set $term alacritty
-set $menu BEMENU_BACKEND=wayland bemenu-run --fn $uifont -b -p "▶" --tf "$prompt" --hf "$highlight" --sf "$highlight" --scf "$highlight" | xargs swaymsg exec
+#set $menu BEMENU_BACKEND=wayland bemenu-run --fn $uifont -b -p "▶" --tf "$prompt" --hf "$highlight" --sf "$highlight" --scf "$highlight" | xargs swaymsg exec
+set $menu fuzzel | xargs swaymsg exec --
 
 bindsym $mod+Shift+r reload
 bindsym $mod+d exec $menu
@@ -15,15 +16,17 @@ bindsym $mod+Return exec $term
 bindsym $mod+Shift+q kill
 bindsym $mod+Shift+e exit
 bindsym $mod+f exec firefox
-bindsym $mod+i exec export _JAVA_AWT_WM_NONREPARENTING=1 && pycharm
+bindsym $mod+p exec export _JAVA_AWT_WM_NONREPARENTING=1 && pycharm
 bindsym $mod+v exec vlc
+bindsym $mod+b exec blueberry
+bindsym $control+p exec Shift+Insert
 
 # Toggle workspaces
 bindsym $mod+Tab workspace back_and_forth
 
 # Switch to prev/next workspace on current output
-bindsym $mod+n workspace next_on_output
-bindsym $mod+p workspace prev_on_output
+bindsym $mod+Shift+n workspace next_on_output
+bindsym $mod+Shift+p workspace prev_on_output
 # Switch to prev/next workspace on all outputs
 bindsym $mod+x workspace next
 bindsym $mod+z workspace prev
@@ -123,17 +126,23 @@ bindsym $mod+r mode "resize"
 
 bindsym $mod+l exec swaylock -e -f -c 000000 -i ~/.config/sway/background.png -t
 bindsym $mod+Shift+l exec swaylock -f && sleep 2 && systemctl suspend
-bindsym $mod+s exec grim -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name')
-bindsym $mod+e exec nemo
+bindsym $mod+Shift+s exec grim -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name')
+bindsym $mod+s exec pavucontrol
+bindsym $mod+c exec element-desktop
+bindsym $mod+t exec teams-for-linux
+bindsym $mod+e exec dolphin 
 bindsym $mod+k exec keeweb
-bindsym $mod+Shift+p exec pycharm
+#bindsym $mod+Shift+p exec pycharm
 
 input * {
     xkb_layout "ch,de"
 }
 
+#Xwayland enable
+xwayland enable
 
 output "*" bg ~/.config/sway/background.png fill
+#output "*" mode 3840x2160 position 0,0 scale 2
 
 # notifications
 exec mako &
@@ -158,5 +167,9 @@ exec wl-paste -t text --watch clipman store --no-persist
 # Switch to headphones
 exec_always --no-startup-id pactl load-module module-switch-on-connect
 
+#Speed up lunch of apps
+exec systemctl --user import-environment
+exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+
 # Conky
-exec env -u DISPLAY conky -c /home/morta/.conkyrc --display=:0 --daemonize --pause=5 & env -u DISPLAY conky -c /home/morta/.conkyrc2 --display=:0 --daemonize --pause=5 &
+exec env -u DISPLAY conky -c /home/morta/.conkyrc --display=:0 --daemonize --pause=5 & env -u DISPLAY conky -c /home/morta/.conkyrc2 --display=:0 --daemonize --pause=5 & 
