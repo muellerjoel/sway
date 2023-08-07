@@ -20,6 +20,12 @@ bindsym $mod+p exec export _JAVA_AWT_WM_NONREPARENTING=1 && pycharm
 bindsym $mod+v exec vlc
 bindsym $mod+b exec blueberry
 bindsym Ctrl+p exec Shift+Insert
+bindsym $mod+s exec pavucontrol
+bindsym $mod+c exec element-desktop
+bindsym $mod+t exec teams-for-linux
+bindsym $mod+e exec dolphin 
+bindsym $mod+k exec keeweb
+bindsym $mod+a exec audacious
 
 # Toggle workspaces
 bindsym $mod+Tab workspace back_and_forth
@@ -127,12 +133,7 @@ bindsym $mod+r mode "resize"
 bindsym $mod+l exec swaylock -e -f -c 000000 -i ~/.config/sway/background.png -t
 bindsym $mod+Shift+l exec swaylock -f && sleep 2 && systemctl suspend
 bindsym $mod+Shift+s exec grim -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name')
-bindsym $mod+s exec pavucontrol
-bindsym $mod+c exec element-desktop
-bindsym $mod+t exec teams-for-linux
-bindsym $mod+e exec dolphin 
-bindsym $mod+k exec keeweb
-#bindsym $mod+Shift+p exec pycharm
+
 
 input * {
     xkb_layout "ch,de"
