@@ -131,7 +131,7 @@ bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@   -5%
 bindsym $mod+r mode "resize"
 
 bindsym $mod+l exec swaylock -e -f -c 000000 -i ~/.config/sway/background.png -t
-bindsym $mod+Shift+l exec swaylock -f && sleep 2 && systemctl suspend
+bindsym $mod+Shift+l exec swaylock -f -i ~/.config/sway/background.png && sleep 2 && systemctl suspend
 bindsym $mod+Shift+s exec grim -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name')
 
 
