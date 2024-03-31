@@ -15,13 +15,13 @@ bindsym $mod+d exec $menu
 bindsym $mod+Return exec $term
 bindsym $mod+Shift+q kill
 bindsym $mod+Shift+e exit
-bindsym $mod+f exec firefox
+bindsym $mod+f exec librewolf
 bindsym $mod+p exec export _JAVA_AWT_WM_NONREPARENTING=1 && pycharm
 bindsym $mod+v exec vlc
 bindsym $mod+b exec blueberry
 bindsym Ctrl+p exec Shift+Insert
 bindsym $mod+s exec pavucontrol
-bindsym $mod+c exec element-desktop
+bindsym $mod+c exec cinny
 bindsym $mod+t exec teams-for-linux
 bindsym $mod+e exec dolphin 
 bindsym $mod+k exec keeweb
@@ -108,22 +108,25 @@ mode "resize" {
 }
 
 
-#for_window [app_id="firefox"] border none
 
 # Assign workspaces
-assign [app_id="firefox"] 2
-for_window [app_id="firefox"] focus
 
-assign [class="firefox"] 2
-for_window [class="firefox"] focus
+for_window [app_id="LibreWolf"] border none
 
+assign [app_id="LibreWolf"] 2
+for_window [app_id="LibreWolf"] focus
+
+assign [class="LibreWolf"] 2
+for_window [class="LibreWolf"] focus
+#for_window [class="LibreWolf"] move container to workspace 2
+#for_window [app_id="LibreWolf"] move container to workspace 2
 
 bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
 bindsym XF86MonBrightnessUp exec brightnessctl set +5%
 bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
-bindsym XF86Search exec bemenu-run
+bindsym XF86Search exec $menu
 bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5% 
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@   -5% 
@@ -167,6 +170,7 @@ exec wl-paste -t text --watch clipman store --no-persist
 
 # Switch to headphones
 exec_always --no-startup-id pactl load-module module-switch-on-connect
+exec_always --no-startup-id pactl load-module module-switch-on-port-available
 
 #Speed up lunch of apps
 exec systemctl --user import-environment
