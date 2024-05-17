@@ -7,8 +7,8 @@ set $up k
 set $right l
 
 set $term alacritty
-#set $menu BEMENU_BACKEND=wayland bemenu-run --fn $uifont -b -p "▶" --tf "$prompt" --hf "$highlight" --sf "$highlight" --scf "$highlight" | xargs swaymsg exec
-set $menu fuzzel | xargs swaymsg exec --
+set $menu BEMENU_BACKEND=wayland bemenu-run --fn $uifont -b -p "▶" --tf "$prompt" --hf "$highlight" --sf "$highlight" --scf "$highlight" | xargs swaymsg exec
+#set $menu fuzzel | xargs swaymsg exec --
 
 bindsym $mod+Shift+r reload
 bindsym $mod+d exec $menu
@@ -18,12 +18,12 @@ bindsym $mod+Shift+e exit
 bindsym $mod+f exec librewolf
 bindsym $mod+p exec export _JAVA_AWT_WM_NONREPARENTING=1 && pycharm
 bindsym $mod+v exec vlc
-bindsym $mod+b exec blueberry
+bindsym $mod+b exec overskirde
 bindsym Ctrl+p exec Shift+Insert
 bindsym $mod+s exec pavucontrol
 bindsym $mod+c exec cinny
 bindsym $mod+t exec teams-for-linux
-bindsym $mod+e exec dolphin 
+bindsym $mod+e exec dolphin
 bindsym $mod+k exec keeweb
 bindsym $mod+a exec audacious
 
@@ -128,13 +128,13 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 bindsym XF86Search exec $menu
 bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
-bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5% 
-bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@   -5% 
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@   -5%
 
 bindsym $mod+r mode "resize"
 
-bindsym $mod+l exec swaylock -e -f -c 000000 -i ~/.config/sway/background.png -t
-bindsym $mod+Shift+l exec swaylock -f -i ~/.config/sway/background.png && sleep 2 && systemctl suspend
+bindsym $mod+l exec swaylock -e -f -c 000000 -i /etc/sway/background.png -t
+bindsym $mod+Shift+l exec swaylock -f -i /etc/sway/background.png && sleep 2 && systemctl suspend
 bindsym $mod+Shift+s exec grim -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name')
 
 
@@ -145,7 +145,7 @@ input * {
 #Xwayland enable
 xwayland enable
 
-output "*" bg ~/.config/sway/background.png fill
+output "*" bg /etc/sway/background.png fill
 #output "*" mode 3840x2160 position 0,0 scale 2
 
 # notifications
@@ -155,12 +155,12 @@ exec mako &
 exec pasystray &
 
 # autolock
-#exec swayidle -w before-sleep 'swaylock -e -f -c 000000 -i ~/.config/sway/background.png -t' after-resume 'swaymsg "output * dpms on"'
+exec swayidle -w before-sleep 'swaylock -e -f -c 000000 -i /etc/sway/background.png -t' after-resume 'swaymsg "output * dpms on"'
 
 exec swayidle -w \
-	timeout 1800 'swaylock -f -c 000000 -i ~/.config/sway/background.png -t' \
-	timeout 1805 'swaymsg "output * power off" && sudo bash  ~/.config/sway/backlights.sh' \
-	resume 'swaymsg "output * power on" && sudo bash  ~/.config/sway/backlights.sh'
+	timeout 1800 'swaylock -f -c 000000 -i /etc/sway/background.png -t' \
+	timeout 1805 'swaymsg "output * power off" && sudo bash  /etc/sway/backlights.sh' \
+	resume 'swaymsg "output * power on" && sudo bash  /etc/sway/backlights.sh'
 
 # network applet
 exec nm-applet --indicator &
@@ -177,4 +177,4 @@ exec systemctl --user import-environment
 exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
 
 # Conky
-exec env -u DISPLAY conky -c /home/morta/.conkyrc --display=:0 --daemonize --pause=5 & env -u DISPLAY conky -c /home/morta/.conkyrc2 --display=:0 --daemonize --pause=5 & 
+#exec env -u DISPLAY conky -c /etc/conky/.conkyrc --display=:0 --daemonize --pause=5 & env -u DISPLAY conky -c /etc/conky/.conkyrc2 --display=:0 --daemonize --pause=5 &
