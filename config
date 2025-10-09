@@ -21,10 +21,10 @@ bindsym $mod+v exec vlc
 bindsym $mod+b exec overskride
 bindsym Ctrl+p exec Shift+Insert
 bindsym $mod+s exec wayland-screenshot
-bindsym $mod+c exec cinny
+bindsym $mod+c exec signal-desktop
 bindsym $mod+e exec dolphin
 bindsym $mod+k exec keeweb
-bindsym $mod+a exec plattenalbum
+bindsym $mod+a exec audacious
 
 # Toggle workspaces
 bindsym $mod+Tab workspace back_and_forth
@@ -89,6 +89,7 @@ bar {
     }
 }
 
+
 include /etc/sway/config.d/*
 
 mode "resize" {
@@ -110,15 +111,13 @@ mode "resize" {
 
 # Assign workspaces
 
-for_window [app_id="LibreWolf"] border none
+for_window [app_id="librewolf"] border none
 
-assign [app_id="LibreWolf"] 2
-for_window [app_id="LibreWolf"] focus
+assign [app_id="librewolf"] 2
+for_window [app_id="librewolf"] focus
 
-assign [class="LibreWolf"] 2
-for_window [class="LibreWolf"] focus
-#for_window [class="LibreWolf"] move container to workspace 2
-#for_window [app_id="LibreWolf"] move container to workspace 2
+for_window [class="librewolf"] move container to workspace 2
+for_window [app_id="librewolf"] move container to workspace 2
 
 bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
 bindsym XF86MonBrightnessUp exec brightnessctl set +5%
@@ -146,6 +145,8 @@ xwayland enable
 
 output "*" bg /etc/sway/background.png fill
 #output "*" mode 3840x2160 position 0,0 scale 2
+
+#exec_always --no-startup-id waybar
 
 # notifications
 exec mako &
@@ -177,3 +178,6 @@ exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSO
 
 # Conky
 #exec env -u DISPLAY conky -c /etc/conky/.conkyrc --display=:0 --daemonize --pause=5 & env -u DISPLAY conky -c /etc/conky/.conkyrc2 --display=:0 --daemonize --pause=5 &
+
+# irssi
+exec_always sh -c 'swaymsg "workspace 1; exec alacritty -e irssi"'
