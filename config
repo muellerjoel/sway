@@ -8,6 +8,7 @@ set $right l
 
 set $term alacritty
 set $menu BEMENU_BACKEND=wayland bemenu-run --fn $uifont -b -p "▶" --tf "$prompt" --hf "$highlight" --sf "$highlight" --scf "$highlight" | xargs swaymsg exec
+set $XDG_CURRENT_DESKTOP sway
 #set $menu fuzzel | xargs swaymsg exec --
 
 bindsym $mod+Shift+r reload
@@ -15,7 +16,9 @@ bindsym $mod+d exec $menu
 bindsym $mod+Return exec $term
 bindsym $mod+Shift+q kill
 bindsym $mod+Shift+e exit
+bindsym $mod+t exec thunderbird
 bindsym $mod+f exec librewolf
+bindsym $mod+m exec euphonica
 bindsym $mod+p exec export _JAVA_AWT_WM_NONREPARENTING=1 && pycharm
 bindsym $mod+v exec vlc
 bindsym $mod+b exec overskride
@@ -25,6 +28,11 @@ bindsym $mod+c exec signal-desktop
 bindsym $mod+e exec dolphin
 bindsym $mod+k exec keeweb
 bindsym $mod+a exec audacious
+bindsym $mod+i exec dopeiptv
+bindsym $mod+n exec sh -c 'pgrep -x wlsunset >/dev/null && pkill -x wlsunset && notify-send "Night light" "OFF" || (wlsunset -l 46.9480 -L 7.4474 -t 3400 >/dev/null 2>&1 & notify-send "Night light" "ON (3400K)")'
+bindsym $mod+w exec whatly
+bindsym $mod+j exec jellyfin-desktop
+#bindsym $mod+7 exec TV7
 
 # Toggle workspaces
 bindsym $mod+Tab workspace back_and_forth
@@ -79,7 +87,7 @@ bar {
     height 20
     status_padding 0
     tray_output none
-    font pango:DejaVu Sans Mono, Font Awesome 6 Free 10
+    font pango:DejaVu Sans Mono, Font Awesome 5 Free 10
     status_command i3status-rs ~/.config/i3status-rust/config.toml
 
     colors {
@@ -110,6 +118,7 @@ mode "resize" {
 
 
 # Assign workspaces
+for_window [title="^Running Devices$"] fullscreen enable
 
 for_window [app_id="librewolf"] border none
 
@@ -131,10 +140,10 @@ bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@   -5%
 
 bindsym $mod+r mode "resize"
 
-bindsym $mod+l exec swaylock -e -f -c 000000 -i /etc/sway/background.png -t
-bindsym $mod+Shift+l exec swaylock -f -i /etc/sway/background.png && sleep 2 && systemctl suspend
+bindsym $mod+l exec sh -c 'swaylock -e -f -c 000000 -i ~/.config/sway/background.png -t & sleep 1.0; wtype d -k Return'
+bindsym $mod+Shift+l exec swaylock -f -i ~/.config/sway/background.png && sleep 2 && systemctl suspend
 bindsym $mod+Shift+s exec grim -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name')
-
+bindsym F8 exec /opt/airmode.sh
 
 input * {
     xkb_layout "ch,de"
@@ -143,8 +152,8 @@ input * {
 #Xwayland enable
 xwayland enable
 
-output "*" bg /etc/sway/background.png fill
-#output "*" mode 3840x2160 position 0,0 scale 2
+output "*" bg ~/.config/sway/background.png fill
+output "*" mode 2304x1440 position 0,0 scale 1.25
 
 #exec_always --no-startup-id waybar
 
@@ -155,13 +164,23 @@ exec mako &
 exec pasystray &
 
 # autolock
-exec swayidle -w before-sleep 'swaylock -e -f -c 000000 -i /etc/sway/background.png -t' after-resume 'swaymsg "output * dpms on"'
 
 exec swayidle -w \
-	timeout 1800 'swaylock -f -c 000000 -i /etc/sway/background.png -t' \
-	timeout 1805 'swaymsg "output * power off" && sudo bash  /etc/sway/backlights.sh' \
-	resume 'swaymsg "output * power on" && sudo bash  /etc/sway/backlights.sh'
+    timeout 1800 'swaylock -f -c 000000 -i ~/.config/sway/background.png -t --scaling fill' \
+    timeout 1805 'swaymsg "output * dpms off" && bash ~/.config/sway/backlights.sh' \
+    resume 'swaymsg "output * dpms on" && bash ~/.config/sway/backlights.sh' \
+    before-sleep 'swaylock -e -f -c 000000 -i ~/.config/sway/background.png -t --scaling fill' \
+    after-resume 'swaymsg "output * dpms on"'
 
+#exec swayidle -w before-sleep 'swaylock-effects -e -f -c 000000 -i ~/.config/sway/background.png -t --scaling fill' after-resume 'swaymsg "output * dpms on"'
+
+#exec swayidle -w \
+#	timeout 1800 'swaylock-effects -f -c 000000 -i ~/.config/sway/background.png -t --scaling fill' \
+#	timeout 1805 'swaymsg "output * power off" && sudo bash  ~/.config/sway/backlights.sh' \
+#	resume 'swaymsg "output * power on" && sudo bash ~/.config/sway/backlights.sh'
+#
+# Polkit
+exec_always lxqt-policykit &
 # network applet
 exec nm-applet --indicator &
 
@@ -181,3 +200,28 @@ exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSO
 
 # irssi
 exec_always sh -c 'swaymsg "workspace 1; exec alacritty -e irssi"'
+
+# Firefox
+exec_always sh -c 'swaymsg "workspace 2; exec librewolf"'
+
+# Signal
+exec_always sh -c 'swaymsg "workspace 3; exec signal-desktop"'
+
+# Whatsapp
+
+exec_always sh -c 'swaymsg "workspace 4; exec whatly"'
+
+# Wlsunset
+exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+exec wlsunset -l 46.9480 -L 7.4474 -t 3400 -T 6500
+
+# Dark Mode
+exec_always {
+    export GTK_THEME=Adwaita-dark
+    export GTK_APPLICATION_PREFER_DARK_THEME=1
+}
+
+# Block Alt+FN+4
+bindsym --no-warn Mod1+F4 nop
+
